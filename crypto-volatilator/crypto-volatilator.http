@@ -1,0 +1,6 @@
+@crypto_volatilator_HostAddress = http://localhost:5250
+
+GET {{crypto_volatilator_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
