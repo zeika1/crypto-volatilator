@@ -26,10 +26,13 @@ app.UseHttpsRedirection();
 
 app.MapGet("/", () => "Minimal API Application is running!");
 
+
+//api call deafault set to: BTCUSD
 app.MapGet("/crypto", async (HttpClient httpClient, string currencyPair = "BTCUSD") =>
 {
     
-    var apiKey = "Q5KVzUVWTqY0FowOEptda4rt8VIlLVJD";
+    var apiKey = Environment.GetEnvironmentVariable("POLYGON_API_KEY");
+
     var formattedCurrencyPair = UtilityFunctions.GetFormattedCurrencyPair(currencyPair).ToUpper();
 
     var url = $"https://api.polygon.io/v2/aggs/ticker/X:{formattedCurrencyPair}/range/1/day/2023-01-09/2023-01-09?adjusted=true&sort=asc&limit=120&apiKey={apiKey}";
@@ -46,9 +49,10 @@ app.Run();
 
 public static class UtilityFunctions
 {
+    //Geting currency from user input
     public static string GetFormattedCurrencyPair(string currencyPair)
     {
-        // Ensure that the currency pair is properly formatted
+        
         return currencyPair.ToLower();
     }
 }
