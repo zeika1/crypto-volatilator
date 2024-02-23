@@ -5,6 +5,7 @@ using System;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,20 +29,33 @@ app.MapGet("/", () => "Minimal API Application is running!");
 
 
 //api call deafault set to: BTCUSD
-app.MapGet("/crypto", async (HttpClient httpClient, string currencyPair = "BTCUSD") =>
+app.MapGet("/crypto", async (HttpClient httpClient, string currencyPair = "BTCUSD", DateTime? startDate = null, DateTime? endDate = null) =>
 {
     
-    var apiKey = Environment.GetEnvironmentVariable("POLYGON_API_KEY");
+    var apiKey = "Q5KVzUVWTqY0FowOEptda4rt8VIlLVJD";
+
+        // If start date is not provided, default to 2023-01-09
+    if (!startDate.HasValue)
+        startDate = new DateTime(2023, 1, 9);
+
+    // If end date is not provided, default to 2023-02-09
+    if (!endDate.HasValue)
+        endDate = new DateTime(2023, 1, 9);
 
     var formattedCurrencyPair = UtilityFunctions.GetFormattedCurrencyPair(currencyPair).ToUpper();
 
-    var url = $"https://api.polygon.io/v2/aggs/ticker/X:{formattedCurrencyPair}/range/1/day/2023-01-09/2023-01-09?adjusted=true&sort=asc&limit=120&apiKey={apiKey}";
+    var startDateString = startDate.Value.ToString("yyyy-MM-dd");
+    var endDateString = endDate.Value.ToString("yyyy-MM-dd");
+
+    var url = $"https://api.polygon.io/v2/aggs/ticker/X:{formattedCurrencyPair}/range/1/day/{startDateString}/{endDateString}?adjusted=true&sort=asc&limit=120&apiKey={apiKey}";
 
     var response = await httpClient.GetAsync(url);
     response.EnsureSuccessStatusCode();
 
     var content = await response.Content.ReadAsStringAsync();
     return content;
+
+
 });
 
 
@@ -56,3 +70,5 @@ public static class UtilityFunctions
         return currencyPair.ToLower();
     }
 }
+
+
