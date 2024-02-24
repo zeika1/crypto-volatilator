@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("crypto-volatilator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+91cdf37ce00538c7c73992842eae66851a5a803e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+291fbe602b72bbe7159c05864ef0c5dbc213be3e")]
 [assembly: System.Reflection.AssemblyProductAttribute("crypto-volatilator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("crypto-volatilator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

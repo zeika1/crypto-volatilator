@@ -38,7 +38,7 @@ app.MapGet("/crypto", async (HttpClient httpClient, string currencyPair = "BTCUS
     if (!startDate.HasValue)
         startDate = new DateTime(2023, 1, 9);
 
-    // If end date is not provided, default to 2023-02-09
+    // If end date is not provided, default to 2023-01-09
     if (!endDate.HasValue)
         endDate = new DateTime(2023, 1, 9);
 
@@ -52,11 +52,24 @@ app.MapGet("/crypto", async (HttpClient httpClient, string currencyPair = "BTCUS
     var response = await httpClient.GetAsync(url);
     response.EnsureSuccessStatusCode();
 
-    var content = await response.Content.ReadAsStringAsync();
-    return content;
+    var contentStream = await response.Content.ReadAsStreamAsync();
+    var jsonDocument = await JsonDocument.ParseAsync(contentStream);
+
+    var results = jsonDocument.RootElement.GetProperty("results");
+    var cArray = new List<decimal>();
+
+    foreach (var result in results.EnumerateArray())
+    {
+        var cValue = result.GetProperty("c").GetDecimal();
+        cArray.Add(cValue);
+    }
+
+    return cArray;
 
 
 });
+
+
 
 
 app.Run();
