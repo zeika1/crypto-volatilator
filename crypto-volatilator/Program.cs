@@ -32,7 +32,7 @@ app.MapGet("/", () => "Minimal API Application is running!");
 app.MapGet("/crypto", async (HttpClient httpClient, string currencyPair = "BTCUSD", DateTime? startDate = null, DateTime? endDate = null) =>
 {
     
-    var apiKey = "Q5KVzUVWTqY0FowOEptda4rt8VIlLVJD";
+    var apiKey = "key";
 
         // If start date is not provided, default to 2023-01-09
     if (!startDate.HasValue)
