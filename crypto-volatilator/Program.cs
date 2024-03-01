@@ -38,9 +38,9 @@ app.MapGet("/crypto", async (HttpClient httpClient, string currencyPair = "BTCUS
     if (!startDate.HasValue)
         startDate = new DateTime(2023, 1, 9);
 
-    // If end date is not provided, default to 2023-01-09
+    // If end date is not provided, default to 2023-01-10
     if (!endDate.HasValue)
-        endDate = new DateTime(2023, 1, 9);
+        endDate = new DateTime(2023, 1, 10);
 
     var formattedCurrencyPair = UtilityFunctions.GetFormattedCurrencyPair(currencyPair).ToUpper();
 
@@ -58,13 +58,17 @@ app.MapGet("/crypto", async (HttpClient httpClient, string currencyPair = "BTCUS
     var results = jsonDocument.RootElement.GetProperty("results");
     var cArray = new List<decimal>();
 
+    //parsing the reurned json format
     foreach (var result in results.EnumerateArray())
     {
         var cValue = result.GetProperty("c").GetDecimal();
         cArray.Add(cValue);
     }
 
-    return cArray;
+
+    var volatility = UtilityFunctions.CalculateVolatility(cArray);
+    return volatility;
+    
 
 
 });
@@ -82,6 +86,45 @@ public static class UtilityFunctions
         
         return currencyPair.ToLower();
     }
+
+    public static double CalculateVolatility(List<decimal> prices)
+    {
+        if (prices == null || prices.Count < 2)
+        {
+            // If there are insufficient data points, return 0
+            return 0;
+        }
+
+        // Calculate the mean of prices
+        decimal mean = prices.Sum() / prices.Count;
+
+        // Calculate the differences from the mean
+        List<decimal> differences = new List<decimal>();
+        foreach (var price in prices)
+        {
+            differences.Add(price - mean);
+        }
+
+        // Calculate the squared differences
+        List<decimal> squaredDifferences = new List<decimal>();
+        foreach (var difference in differences)
+        {
+            squaredDifferences.Add(difference * difference);
+        }
+
+        // Calculate the variance
+        decimal variance = squaredDifferences.Sum() / prices.Count;
+
+        // Calculate the standard deviation (volatility)
+        double volatility = Math.Sqrt((double)variance);
+
+        return Math.Round(volatility, 2);
+    }
+
+
 }
+
+
+
 
 
