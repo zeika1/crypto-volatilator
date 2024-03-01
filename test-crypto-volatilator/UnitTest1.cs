@@ -12,6 +12,6 @@ public class UtilityFunctionsTests
         double volatility = UtilityFunctions.CalculateVolatility(prices);
 
         double expectedVolatility = 1.92; 
-        Assert.Equal(expectedVolatility, volatility, 4); // Using a tolerance of 0.0001 for floating point comparison
+        Assert.Equal(expectedVolatility, volatility, 4); 
     }
 }
