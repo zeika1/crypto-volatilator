@@ -1,3 +1,6 @@
 .vscode/
 crypto-volatilator/bin/
 crypto-volatilator/obj/
+
+test-crypto-volatilator/obj/
+test-crypto-volatilator/bin/
